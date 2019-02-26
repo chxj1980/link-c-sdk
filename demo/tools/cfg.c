@@ -362,6 +362,7 @@ static CfgItem cfg_items[] =
     { CFG_MEMBER(dsk), "DSK", 1 },
     { CFG_MEMBER(ak), "AK", 1 },
     { CFG_MEMBER(sk), "SK", 1 },
+    { CFG_MEMBER(devId), "DEVICE_ID", 1 },
     { CFG_MEMBER(mqtt_server), "MQTT_SERVER", 1 },
     { CFG_MEMBER(mqtt_user), "MQTT_USER", 1 },
     { CFG_MEMBER(mqtt_passwd), "MQTT_PASSWD", 1 },

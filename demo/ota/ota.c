@@ -1,4 +1,4 @@
-// Last Update:2019-02-22 21:16:10
+// Last Update:2019-02-26 18:53:45
 /**
  * @file ota.c
  * @brief 
@@ -315,8 +315,8 @@ static void OnEvent(const void* _pInstance, int _nAccountId, int _nId,  const ch
          _pInstance == gOtaInfo.pMqttInstance && 
          _nId == MQTT_SUCCESS ) {
 
-        LOGI("subscribe topic %s\n", gIpc.config.mqttOtaTopic );
-        LinkMqttSubscribe( _pInstance, gIpc.config.mqttOtaTopic );
+        LOGI("subscribe topic %s\n", gIpc.config.devId );
+        LinkMqttSubscribe( _pInstance, gIpc.config.devId );
     }
 
 }
@@ -394,7 +394,7 @@ void *OtaOverMqttTask( void *arg )
     struct MqttOptions options, *ops = &options;
     char clientId[16] = { 0 };
 
-    sprintf( clientId, "%s-ota", gIpc.config.client_id );
+    sprintf( clientId, "%s-ota", gIpc.config.devId );
 
     memset( ops, 0, sizeof(struct MqttOptions) );
     ops->pId = clientId;
@@ -416,7 +416,7 @@ void *OtaOverMqttTask( void *arg )
         goto err;
     } else {
         LOGE("[ thread id : %d ] create mqtt instance success, client : %s, broker : %s port : %d topic : %s\n",
-             (int)pthread_self(), clientId, gIpc.config.mqtt_server, gIpc.config.mqtt_port, gIpc.config.mqttOtaTopic );
+             (int)pthread_self(), clientId, gIpc.config.mqtt_server, gIpc.config.mqtt_port, gIpc.config.devId );
     }
 
     for (;;) {
@@ -516,12 +516,8 @@ void StartUpgradeTask()
 {
     pthread_t thread = 0;
 
-    if ( gIpc.config.ota_enable && gIpc.config.otaMode ) {
-        if ( strcmp( gIpc.config.otaMode, "ota-over-mqtt" ) == 0 ) {
-            pthread_create( &thread, NULL, OtaOverMqttTask, NULL );
-        } else {
-            pthread_create( &thread, NULL, UpgradeTask, NULL );
-        }
+    if ( gIpc.config.ota_enable ) {
+        pthread_create( &thread, NULL, UpgradeTask, NULL );
     }
 }
 

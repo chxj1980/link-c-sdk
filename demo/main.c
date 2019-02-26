@@ -444,8 +444,10 @@ int main()
         logFile = gIpc.config.defaultLogFile;
     }
 
-    if ( fork() == 0 ) {
-        TelnetdProcess();
+    if ( gIpc.config.telnetdEnable ) {
+        if ( fork() == 0 ) {
+            TelnetdProcess();
+        }
     }
 
     if ( gIpc.config.logOutput == OUTPUT_MQTT && !gIpc.config.devId ) {
